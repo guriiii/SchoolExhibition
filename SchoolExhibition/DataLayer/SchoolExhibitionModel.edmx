@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SchoolExhibitionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClassMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClassName" Type="nvarchar" MaxLength="50" />
+          <Property Name="NumberOfStudents" Type="int" />
+          <Property Name="Section" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ExhibitionCoordinatorMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="StudentMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClassMasterID" Type="int" />
+          <Property Name="ExhibitionCoordinatorMasterID" Type="int" />
+          <Property Name="StudentName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_StudentMaster_ClassMaster">
+          <End Role="ClassMaster" Type="Self.ClassMaster" Multiplicity="0..1" />
+          <End Role="StudentMaster" Type="Self.StudentMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StudentMaster">
+              <PropertyRef Name="ClassMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentMaster_ExhibitionCoordinatorMaster">
+          <End Role="ExhibitionCoordinatorMaster" Type="Self.ExhibitionCoordinatorMaster" Multiplicity="0..1" />
+          <End Role="StudentMaster" Type="Self.StudentMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExhibitionCoordinatorMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StudentMaster">
+              <PropertyRef Name="ExhibitionCoordinatorMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SchoolExhibitionModelStoreContainer">
+          <EntitySet Name="ClassMaster" EntityType="Self.ClassMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExhibitionCoordinatorMaster" EntityType="Self.ExhibitionCoordinatorMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentMaster" EntityType="Self.StudentMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_StudentMaster_ClassMaster" Association="Self.FK_StudentMaster_ClassMaster">
+            <End Role="ClassMaster" EntitySet="ClassMaster" />
+            <End Role="StudentMaster" EntitySet="StudentMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentMaster_ExhibitionCoordinatorMaster" Association="Self.FK_StudentMaster_ExhibitionCoordinatorMaster">
+            <End Role="ExhibitionCoordinatorMaster" EntitySet="ExhibitionCoordinatorMaster" />
+            <End Role="StudentMaster" EntitySet="StudentMaster" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SchoolExhibitionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClassMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClassName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfStudents" Type="Int32" />
+          <Property Name="Section" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StudentMasters" Relationship="Self.FK_StudentMaster_ClassMaster" FromRole="ClassMaster" ToRole="StudentMaster" />
+        </EntityType>
+        <EntityType Name="ExhibitionCoordinatorMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StudentMasters" Relationship="Self.FK_StudentMaster_ExhibitionCoordinatorMaster" FromRole="ExhibitionCoordinatorMaster" ToRole="StudentMaster" />
+        </EntityType>
+        <EntityType Name="StudentMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClassMasterID" Type="Int32" />
+          <Property Name="ExhibitionCoordinatorMasterID" Type="Int32" />
+          <Property Name="StudentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ClassMaster" Relationship="Self.FK_StudentMaster_ClassMaster" FromRole="StudentMaster" ToRole="ClassMaster" />
+          <NavigationProperty Name="ExhibitionCoordinatorMaster" Relationship="Self.FK_StudentMaster_ExhibitionCoordinatorMaster" FromRole="StudentMaster" ToRole="ExhibitionCoordinatorMaster" />
+        </EntityType>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_StudentMaster_ClassMaster">
+          <End Role="ClassMaster" Type="Self.ClassMaster" Multiplicity="0..1" />
+          <End Role="StudentMaster" Type="Self.StudentMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StudentMaster">
+              <PropertyRef Name="ClassMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StudentMaster_ExhibitionCoordinatorMaster">
+          <End Role="ExhibitionCoordinatorMaster" Type="Self.ExhibitionCoordinatorMaster" Multiplicity="0..1" />
+          <End Role="StudentMaster" Type="Self.StudentMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExhibitionCoordinatorMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StudentMaster">
+              <PropertyRef Name="ExhibitionCoordinatorMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SchoolExhibitionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClassMasters" EntityType="Self.ClassMaster" />
+          <EntitySet Name="ExhibitionCoordinatorMasters" EntityType="Self.ExhibitionCoordinatorMaster" />
+          <EntitySet Name="StudentMasters" EntityType="Self.StudentMaster" />
+          <EntitySet Name="UserMasters" EntityType="Self.UserMaster" />
+          <AssociationSet Name="FK_StudentMaster_ClassMaster" Association="Self.FK_StudentMaster_ClassMaster">
+            <End Role="ClassMaster" EntitySet="ClassMasters" />
+            <End Role="StudentMaster" EntitySet="StudentMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StudentMaster_ExhibitionCoordinatorMaster" Association="Self.FK_StudentMaster_ExhibitionCoordinatorMaster">
+            <End Role="ExhibitionCoordinatorMaster" EntitySet="ExhibitionCoordinatorMasters" />
+            <End Role="StudentMaster" EntitySet="StudentMasters" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SchoolExhibitionModelStoreContainer" CdmEntityContainer="SchoolExhibitionEntities">
+          <EntitySetMapping Name="ClassMasters">
+            <EntityTypeMapping TypeName="SchoolExhibitionModel.ClassMaster">
+              <MappingFragment StoreEntitySet="ClassMaster">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="NumberOfStudents" ColumnName="NumberOfStudents" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExhibitionCoordinatorMasters">
+            <EntityTypeMapping TypeName="SchoolExhibitionModel.ExhibitionCoordinatorMaster">
+              <MappingFragment StoreEntitySet="ExhibitionCoordinatorMaster">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentMasters">
+            <EntityTypeMapping TypeName="SchoolExhibitionModel.StudentMaster">
+              <MappingFragment StoreEntitySet="StudentMaster">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClassMasterID" ColumnName="ClassMasterID" />
+                <ScalarProperty Name="ExhibitionCoordinatorMasterID" ColumnName="ExhibitionCoordinatorMasterID" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMasters">
+            <EntityTypeMapping TypeName="SchoolExhibitionModel.UserMaster">
+              <MappingFragment StoreEntitySet="UserMaster">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
